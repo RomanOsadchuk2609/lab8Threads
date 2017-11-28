@@ -8,32 +8,18 @@ public class MyThread extends Thread {
     private Integer counter;
     private Integer difference;
     private Boolean isWorking;
-    private Integer sum;
     private Integer lastValueOfCounter;
     private Boolean isPreviousValueWritten;
-    private ArrayList<Integer> listOfValues;
 
     public MyThread(Integer delayAsMilliSeconds, Integer difference) {
         this.delayAsMilliSeconds = delayAsMilliSeconds;
         this.difference = difference;
         this.counter=0;
         isWorking =false;
-        sum = 0;
         isPreviousValueWritten = true;
-        listOfValues = new ArrayList<>();
         lastValueOfCounter = 0;
     }
 
-    public MyThread(Integer delayAsMilliSeconds) {
-        this.delayAsMilliSeconds = delayAsMilliSeconds;
-        this.counter=0;
-        this.difference = 10;
-        isWorking =false;
-        sum = 0;
-        isPreviousValueWritten = true;
-        listOfValues = new ArrayList<>();
-        lastValueOfCounter =0;
-    }
 
     public Integer getLastValueOfCounter() {
         return lastValueOfCounter;
@@ -43,46 +29,26 @@ public class MyThread extends Thread {
         this.lastValueOfCounter = lastValueOfCounter;
     }
 
-    public MyThread() {
-        this.delayAsMilliSeconds = 100;
-        this.counter = 0;
-        this.difference = 10;
-        isWorking =false;
-        sum = 0;
-        isPreviousValueWritten = true;
-        listOfValues = new ArrayList<>();
-        lastValueOfCounter = 0;
-
-    }
     @Override
     public void run() {
         Random random = new Random();
-       while (/*isWorking*/true){
+       while (true){
            if(isInterrupted())break;
-           if(isWorking){
-           //if (!isWorking) {interrupt();}
-            if (isPreviousValueWritten){
-                counter = (random.nextInt(9)+1)*difference;
-                listOfValues.add(counter);
-                lastValueOfCounter = counter;
-                isPreviousValueWritten = false;
+               if(isWorking){
+                if (isPreviousValueWritten){
+                    counter = (random.nextInt(9)+1)*difference;
+                    lastValueOfCounter = counter;
+                    isPreviousValueWritten = false;
+                }
+
+               try {
+                   sleep(delayAsMilliSeconds/*(random.nextInt(9)+1)*/);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+
             }
-
-           try {
-               sleep(delayAsMilliSeconds/*(random.nextInt(9)+1)*/);
-           } catch (InterruptedException e) {
-               e.printStackTrace();
-           }
-
         }
-    }}
-
-    public ArrayList<Integer> getListOfValues() {
-        return listOfValues;
-    }
-
-    public void setListOfValues(ArrayList<Integer> listOfValues) {
-        this.listOfValues = listOfValues;
     }
 
     public Boolean isPreviousValueWritten() {
@@ -91,15 +57,6 @@ public class MyThread extends Thread {
 
     public void setPreviousValueWritten(Boolean previousValueWritten) {
         isPreviousValueWritten = previousValueWritten;
-    }
-
-    public Integer getSum() {
-        sum = listOfValues.stream().mapToInt(l -> l.intValue()).sum();
-        return sum;
-    }
-
-    public void setSum(Integer sum) {
-        this.sum = sum;
     }
 
     public Integer getDelayAsMilliSeconds() {

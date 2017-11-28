@@ -14,23 +14,17 @@ public class MyCalculations {
     private MyThread thread2 = new MyThread(800,10);
     private MyThread thread3 = new MyThread(3000,100);
     private Integer sum;
-    private Boolean wasReachedTheAverageValueOfTheSum;
-    private ArrayList<Integer> listOfValues1;
-    private ArrayList<Integer> listOfValues2;
-    private ArrayList<Integer> listOfValues3;
+    private ArrayList<Integer> listOfValues;
     private ObservableList<String> history;
    //
 
     public MyCalculations() {
         sum = 0;
-        listOfValues1 = new ArrayList<>();
-        listOfValues2 = new ArrayList<>();
-        listOfValues3 = new ArrayList<>();
+        listOfValues = new ArrayList<>();
         history = FXCollections.observableArrayList();
         thread1.start();
         thread2.start();
         thread3.start();
-        wasReachedTheAverageValueOfTheSum = false;
     }
 
     //****************************************************************************
@@ -49,241 +43,123 @@ public class MyCalculations {
     }
 
     public Integer getSum() {
-        sum = listOfValues1.stream().mapToInt(l -> l.intValue()).sum()
-                + listOfValues2.stream().mapToInt(l -> l.intValue()).sum()
-                + listOfValues3.stream().mapToInt(l -> l.intValue()).sum();
+        sum = listOfValues.stream().mapToInt(l -> l.intValue()).sum();
         return sum;
     }
 
     public void writeValuesToTheSum(){
-        /*if(!wasReachedTheAverageValueOfTheSum && thread3.getLastValueOfCounter()!=0) {
-            thread3.setPreviousValueWritten(true);
-            //listOfValues3 = thread3.getListOfValues();
-            listOfValues3.add(thread3.getLastValueOfCounter());
-            //history.add(new HistoryOfCalculations(thread3.getLastValueOfCounter(),"in"));
-            Date date = new Date();
-            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-            history.add(thread3.getLastValueOfCounter()+" in "+myDate.format(date));
-            thread3.setLastValueOfCounter(0);
-            if (getSum()>=18500 && getSum()<=19500){
-                wasReachedTheAverageValueOfTheSum = true;
+        Integer lastValue1 = thread1.getLastValueOfCounter();
+        Integer lastValue2 = thread2.getLastValueOfCounter();
+        Integer lastValue3 = thread3.getLastValueOfCounter();
+        Integer sumOut1=0;
+        Integer sumOut2=0;
+        Integer sumOut3=0;
+
+        //*********************************************************************
+        //Thread 3
+        //*********************************************************************
+        if(lastValue3!=0){
+            if (this.getSum()+lastValue3<=19500){
+                Date date = new Date();
+                SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
+                history.add(lastValue3+" in "+myDate.format(date));
+                listOfValues.add(lastValue3);
+                thread3.setLastValueOfCounter(0);
+                thread3.setPreviousValueWritten(true);
             }
-        }
-        if(!wasReachedTheAverageValueOfTheSum && thread2.getLastValueOfCounter()!=0) {
-            thread2.setPreviousValueWritten(true);
-            //listOfValues2 = thread2.getListOfValues();
-            listOfValues2.add(thread2.getLastValueOfCounter());
-            //history.add(new HistoryOfCalculations(thread2.getLastValueOfCounter(),"in"));
-            Date date = new Date();
-            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-            history.add(thread2.getLastValueOfCounter()+" in "+myDate.format(date));
-            thread2.setLastValueOfCounter(0);
-            if (getSum()>=18500 && getSum()<=19500)
-                wasReachedTheAverageValueOfTheSum = true;
+            else{
+                int i=0;
+                while(i<listOfValues.size()){
+                    if (this.getSum()-(sumOut3+listOfValues.get(i))>=18500){
+                        sumOut3+=listOfValues.get(i);
+                        Date date = new Date();
+                        SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
+                        history.add(listOfValues.get(i)+" out "+myDate.format(date));
+                        listOfValues.remove(i);
+                    }
+                    else i++;
+                }
 
-        }
-        if(!wasReachedTheAverageValueOfTheSum && thread1.getLastValueOfCounter()!=0) {
-            thread1.setPreviousValueWritten(true);
-            //listOfValues1 = thread1.getListOfValues();
-            listOfValues1.add(thread1.getLastValueOfCounter());
-            //history.add(new HistoryOfCalculations(thread1.getLastValueOfCounter(),"in"));
-            Date date = new Date();
-            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-            history.add(thread1.getLastValueOfCounter()+" in "+myDate.format(date));
-            thread1.setLastValueOfCounter(0);
-            if (getSum()>=18500 && getSum()<=19500) {
-                wasReachedTheAverageValueOfTheSum = true;
-            }
-        }*/
-        //if(/*wasReachedTheAverageValueOfTheSum*/true){
-            Integer lastValue1 = thread1.getLastValueOfCounter();
-            Integer lastValue2 = thread2.getLastValueOfCounter();
-            Integer lastValue3 = thread3.getLastValueOfCounter();
-
-            Integer sumOut1=0;
-            Integer sumOut2=0;
-            Integer sumOut3=0;
-
-            //*********************************************************************
-            //Thread 3
-            //*********************************************************************
-            if(lastValue3!=0){
-                if (this.getSum()+lastValue3<=19500){
+                if (sumOut3>=lastValue3){
                     Date date = new Date();
                     SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
                     history.add(lastValue3+" in "+myDate.format(date));
-                    listOfValues3.add(lastValue3);
+                    listOfValues.add(lastValue3);
                     thread3.setLastValueOfCounter(0);
                     thread3.setPreviousValueWritten(true);
                 }
-                else{
-                    int i=0;
-                    while(i<listOfValues3.size()){
-                        if (this.getSum()-(sumOut3+listOfValues3.get(i))>=18500){
-                            sumOut3+=listOfValues3.get(i);
-                            Date date = new Date();
-                            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                            history.add(listOfValues3.get(i)+" out "+myDate.format(date));
-                            listOfValues3.remove(i);
-                        }
-                        else i++;
-                    }
+            }
+        }
 
-                    if (sumOut3>=lastValue3){
+        //*********************************************************************
+        //Thread 2
+        //*********************************************************************
+        if (lastValue2!=0){
+            if (this.getSum()+lastValue2<=19500){
+                Date date = new Date();
+                SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
+                history.add(lastValue2+" in "+myDate.format(date));
+                listOfValues.add(lastValue2);
+                thread2.setLastValueOfCounter(0);
+                thread2.setPreviousValueWritten(true);
+            }
+            else{
+                int i=0;
+                while(i<listOfValues.size()){
+                    if (this.getSum()-(sumOut2+listOfValues.get(i))>=18500){
+                        sumOut2+=listOfValues.get(i);
                         Date date = new Date();
                         SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                        history.add(lastValue3+" in "+myDate.format(date));
-                        listOfValues3.add(lastValue3);
-                        thread3.setLastValueOfCounter(0);
-                        thread3.setPreviousValueWritten(true);
+                        history.add(listOfValues.get(i)+" out "+myDate.format(date));
+                        listOfValues.remove(i);
                     }
-                    else{
-                        i=0;
-                        while(i<listOfValues2.size()){
-                            if (this.getSum()-(sumOut3+listOfValues2.get(i))>=18500){
-                                sumOut3+=listOfValues2.get(i);
-                                Date date = new Date();
-                                SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                                history.add(listOfValues2.get(i)+" out "+myDate.format(date));
-                                listOfValues2.remove(i);
-                            }
-                            else i++;
-                        }
-
-                        if (sumOut3>=lastValue3){
-                            Date date = new Date();
-                            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                            history.add(lastValue3+" in "+myDate.format(date));
-                            listOfValues3.add(lastValue3);
-                            thread3.setLastValueOfCounter(0);
-                            thread3.setPreviousValueWritten(true);
-                        }
-                        else{
-                            i=0;
-                            while(i<listOfValues1.size()){
-                                if (this.getSum()-(sumOut3+listOfValues1.get(i))>=18500){
-                                    sumOut3+=listOfValues1.get(i);
-                                    Date date = new Date();
-                                    SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                                    history.add(listOfValues1.get(i)+" out "+myDate.format(date));
-                                    listOfValues1.remove(i);
-                                }
-                                else i++;
-                            }
-
-                            if (sumOut3>=lastValue3){
-                                Date date = new Date();
-                                SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                                history.add(lastValue3+" in "+myDate.format(date));
-                                listOfValues3.add(lastValue3);
-                                thread3.setLastValueOfCounter(0);
-                                thread3.setPreviousValueWritten(true);
-                            }
-                        }
-                    }
-
+                    else i++;
                 }
-
-            }
-
-            //*********************************************************************
-            //Thread 2
-            //*********************************************************************
-            if (lastValue2!=0){
                 if (this.getSum()+lastValue2<=19500){
                     Date date = new Date();
                     SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
                     history.add(lastValue2+" in "+myDate.format(date));
-                    listOfValues2.add(lastValue2);
+                    listOfValues.add(lastValue2);
                     thread2.setLastValueOfCounter(0);
                     thread2.setPreviousValueWritten(true);
                 }
-                else{
-                    int i=0;
-                    while(i<listOfValues2.size()){
-                        if (this.getSum()-(sumOut2+listOfValues2.get(i))>=18500){
-                            sumOut2+=listOfValues2.get(i);
-                            Date date = new Date();
-                            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                            history.add(listOfValues2.get(i)+" out "+myDate.format(date));
-                            listOfValues2.remove(i);
-                        }
-                        else i++;
-                    }
+            }
+        }
 
-                    if (this.getSum()+lastValue2<=19500){
+        //*********************************************************************
+        //Thread 2
+        //*********************************************************************
+        if (lastValue1!=0){
+            if (this.getSum()+lastValue1 <= 19500){
+                Date date = new Date();
+                SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
+                history.add(lastValue1+" in "+myDate.format(date));
+                listOfValues.add(lastValue1);
+                thread1.setLastValueOfCounter(0);
+                thread1.setPreviousValueWritten(true);
+            }
+            else{
+                int i=0;
+                while(i<listOfValues.size()){
+                    if (this.getSum()-(sumOut1+listOfValues.get(i))>=18500){
+                        sumOut1+=listOfValues.get(i);
                         Date date = new Date();
                         SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                        history.add(lastValue2+" in "+myDate.format(date));
-                        listOfValues2.add(lastValue2);
-                        thread2.setLastValueOfCounter(0);
-                        thread2.setPreviousValueWritten(true);
+                        history.add(listOfValues.get(i)+" out "+myDate.format(date));
+                        listOfValues.remove(i);
                     }
-                    else{
-                        i=0;
-                        while(i<listOfValues1.size()){
-                            if (this.getSum()-(sumOut2+listOfValues1.get(i))>=18500){
-                                sumOut2+=listOfValues1.get(i);
-                                Date date = new Date();
-                                SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                                history.add(listOfValues1.get(i)+" out "+myDate.format(date));
-                                listOfValues1.remove(i);
-                            }
-                            else i++;
-                        }
-                        if (this.getSum()+lastValue2<=19500){
-                            Date date = new Date();
-                            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                            history.add(lastValue1+" in "+myDate.format(date));
-                            listOfValues2.add(lastValue2);
-                            thread2.setLastValueOfCounter(0);
-                            thread2.setPreviousValueWritten(true);
-                        }
-                    }
+                    else i++;
                 }
-            }
-
-            //*********************************************************************
-            //Thread 2
-            //*********************************************************************
-            if (lastValue1!=0){
-                if (this.getSum()+lastValue1 <= 19500){
+                if (this.getSum()+lastValue1<=19500){
                     Date date = new Date();
                     SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
                     history.add(lastValue1+" in "+myDate.format(date));
-                    listOfValues1.add(lastValue1);
+                    listOfValues.add(lastValue1);
                     thread1.setLastValueOfCounter(0);
                     thread1.setPreviousValueWritten(true);
                 }
-                else{
-                    int i=0;
-                    while(i<listOfValues1.size()){
-                        if (this.getSum()-(sumOut1+listOfValues1.get(i))>=18500){
-                            sumOut1+=listOfValues1.get(i);
-                            Date date = new Date();
-                            SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                            history.add(listOfValues1.get(i)+" out "+myDate.format(date));
-                            listOfValues1.remove(i);
-                        }
-                        else i++;
-                    }
-                    if (this.getSum()+lastValue1<=19500){
-                        Date date = new Date();
-                        SimpleDateFormat myDate = new SimpleDateFormat(" dd.MM.yyyy HH:mm:ss");
-                        history.add(lastValue1+" in "+myDate.format(date));
-                        listOfValues1.add(lastValue1);
-                        thread1.setLastValueOfCounter(0);
-                        thread1.setPreviousValueWritten(true);
-                    }
-                }
             }
-
-
-            //*********************************************************************
-            //*********************************************************************
-
-
-        //}
+        }
 
     }
 
