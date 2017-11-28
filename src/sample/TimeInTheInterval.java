@@ -34,4 +34,8 @@ public class TimeInTheInterval extends Thread{
     public void startThread() {
         isStopped = false;
     }
+
+    public Boolean isStopped() {
+        return isStopped;
+    }
 }

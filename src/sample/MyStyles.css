@@ -1,0 +1,52 @@
+.button{
+    -fx-background-color: rgba(160, 215, 255, 0.88);
+    -fx-border-color: rgb(107, 163, 224);
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 10;
+    -fx-font-family: serif;
+    -fx-font-style: normal;
+    -fx-font-size: 18;
+    -fx-text-fill: #191954;
+    -fx-padding: 0;
+    -fx-animated: true;
+}
+
+.button:hover{
+    -fx-background-color: rgba(83, 119, 227, 0.88);
+    -fx-border-color: rgb(55, 70, 158);
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 10;
+    -fx-font-family: serif;
+    -fx-font-style: normal;
+    -fx-text-fill: #f7fdff;
+    -fx-padding: 0;
+    -fx-font-size: 20;
+    -fx-cursor: hand;
+}
+.button:pressed{
+    -fx-effect: dropshadow(gaussian, midnightblue, 10, 0.7,0, 0);
+}
+.slider {
+    -fx-control-inner-background: #bddaff;
+}
+.slider .thumb{
+    -fx-background-color : #7cafe0;
+    -fx-border-color: rgb(91, 147, 224);
+    -fx-border-radius: 30;
+}
+.slider .thumb:hover{
+    -fx-background-color : #7cafe0;
+    -fx-border-color: rgb(70, 93, 150);
+    -fx-border-radius: 30;
+    -fx-cursor: hand;
+}
+.slider .thumb:pressed{
+    -fx-effect: dropshadow(gaussian, midnightblue, 8, 0.65,0, 0);
+}
+.label{
+    -fx-text-fill: #18185c;
+}

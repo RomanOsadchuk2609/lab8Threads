@@ -83,14 +83,10 @@ public class Controller {
                 calculations.writeValuesToTheSum();
                 lblSum.setText(calculations.getSum()+"");
                 listInfo.setItems(calculations.getHistory());
-                if(calculations.getSum()>=18500 && !reachedTheInterval){
-                    reachedTheInterval = true;
+                if(calculations.getSum()>=18500 && !isAllThreadsStopped()){
                     timeInTheInterval.startThread();
-                }
-                if (reachedTheInterval){
                     lblTimeInTheInterval.setText(timeInTheInterval.getSeconds()+"");
                 }
-
 
             }
 
@@ -100,6 +96,9 @@ public class Controller {
 
     @FXML
     void initialize() {
+        lbl1.setText("0");
+        lbl2.setText("0");
+        lbl3.setText("0");
         timeInTheInterval.start();
         at.start();
     }
@@ -139,16 +138,19 @@ public class Controller {
     @FXML
     void OnClickBtnStopThread1(ActionEvent event) {
         calculations.stopThread1();
+        timeInTheInterval.stopThread();
     }
 
     @FXML
     void OnClickBtnStopThread2(ActionEvent event) {
         calculations.stopThread2();
+        timeInTheInterval.stopThread();
     }
 
     @FXML
     void OnClickBtnStopThread3(ActionEvent event) {
         calculations.stopThread3();
+        timeInTheInterval.stopThread();
     }
 
     @FXML
@@ -156,6 +158,12 @@ public class Controller {
         OnClickBtnStopThread1(event);
         OnClickBtnStopThread2(event);
         OnClickBtnStopThread3(event);
+    }
+
+    private Boolean isAllThreadsStopped(){
+        Boolean isAllThreadsStopped = (!calculations.isThread1Working()
+            && !calculations.isThread2Working() && !calculations.isThread3Working());
+        return isAllThreadsStopped;
     }
 
 
