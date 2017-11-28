@@ -5,7 +5,8 @@
     -fx-border-width: 2;
     -fx-background-insets: 0 0 -1 0,0,1;
     -fx-background-radius: 10;
-    -fx-font-family: serif;
+   /* -fx-font-family: serif;*/
+    -fx-font-family: fantasy;
     -fx-font-style: normal;
     -fx-font-size: 18;
     -fx-text-fill: #191954;
@@ -20,11 +21,13 @@
     -fx-border-width: 2;
     -fx-background-insets: 0 0 -1 0,0,1;
     -fx-background-radius: 10;
-    -fx-font-family: serif;
+    /*-fx-font-family: serif;*/
+    -fx-font-size: 20;
+    -fx-font-family: fantasy;
     -fx-font-style: normal;
+    /*-fx-font-weight: bold;*/
     -fx-text-fill: #f7fdff;
     -fx-padding: 0;
-    -fx-font-size: 20;
     -fx-cursor: hand;
 }
 .button:pressed{
