@@ -16,7 +16,8 @@ public class MyCalculations {
     private Integer sum;
     private ArrayList<Integer> listOfValues;
     private ObservableList<String> history;
-   //
+
+    private TimeInTheInterval timeInTheInterval = new TimeInTheInterval();
 
     public MyCalculations() {
         sum = 0;
@@ -25,6 +26,7 @@ public class MyCalculations {
         thread1.start();
         thread2.start();
         thread3.start();
+        timeInTheInterval.start();
     }
 
     //****************************************************************************

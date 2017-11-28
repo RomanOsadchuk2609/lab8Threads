@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.TouchEvent;
 
+import java.time.LocalTime;
+
 public class Controller {
 
     @FXML
@@ -61,6 +63,12 @@ public class Controller {
     @FXML
     private Label lblSum;
 
+    @FXML
+    private Label lblTimeInTheInterval;
+
+    private Boolean reachedTheInterval=false;
+    private TimeInTheInterval timeInTheInterval = new TimeInTheInterval();
+
     private MyCalculations calculations = new MyCalculations();
 
     private AnimationTimer at = new AnimationTimer() {
@@ -75,6 +83,14 @@ public class Controller {
                 calculations.writeValuesToTheSum();
                 lblSum.setText(calculations.getSum()+"");
                 listInfo.setItems(calculations.getHistory());
+                if(calculations.getSum()>=18500 && !reachedTheInterval){
+                    reachedTheInterval = true;
+                    timeInTheInterval.startThread();
+                }
+                if (reachedTheInterval){
+                    lblTimeInTheInterval.setText(timeInTheInterval.getSeconds()+"");
+                }
+
 
             }
 
@@ -84,6 +100,7 @@ public class Controller {
 
     @FXML
     void initialize() {
+        timeInTheInterval.start();
         at.start();
     }
 
